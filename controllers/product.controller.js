@@ -4,7 +4,7 @@ const productController = {
   getAllProducts: async (req, res) => {
     try {
       const page = parseInt(req.query.page) || 1;
-      const pageSize = parseInt(req.query.pageSize) || 10;
+      const pageSize = parseInt(req.query.pageSize) || 20;
       const skip = (page - 1) * pageSize;
 
       const totalProducts = await Product.countDocuments();
@@ -78,7 +78,7 @@ const productController = {
     try {
       const id = req.params.id;
       const page = parseInt(req.query.page) || 1;
-      const pageSize = parseInt(req.query.pageSize) || 10;
+      const pageSize = parseInt(req.query.pageSize) || 20;
 
       const totalProducts = await Product.countDocuments({
         category: id,
