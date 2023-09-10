@@ -22,8 +22,16 @@ export const verifyToken = (req, res, next) => {
 // Middleware to check user's role (optional)
 export const verifyTokenAndUserAuthorization = (req, res, next) => {
   verifyToken(req, res, () => {
-    console.log(req.user.id);
     if (req.user.id) {
+      next();
+    } else {
+      res.status(403).json("You're not allowed to do that!");
+    }
+  });
+};
+export const verifyTokenAndAdminAuthorization = (req, res, next) => {
+  verifyToken(req, res, () => {
+    if (req.user.id || req.user.role === admin) {
       next();
     } else {
       res.status(403).json("You're not allowed to do that!");
