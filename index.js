@@ -1,14 +1,14 @@
-import express from "express";
+import bodyParser from "body-parser";
+import cookieParser from "cookie-parser";
 import cors from "cors";
 import dotenv from "dotenv";
-import cookieParser from "cookie-parser";
+import express from "express";
 import mongoose from "mongoose";
-import categoryRoute from "./routes/category.routes.js";
-import productRoute from "./routes/product.routes.js";
 import authRoute from "./routes/auth.routes.js";
-import userRoute from "./routes/user.routes.js";
+import categoryRoute from "./routes/category.routes.js";
 import oderRoute from "./routes/oder.routes.js";
-import bodyParser from "body-parser";
+import productRoute from "./routes/product.routes.js";
+import userRoute from "./routes/user.routes.js";
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 8000;
@@ -38,6 +38,7 @@ app.use("/product", productRoute);
 app.use("/user", userRoute);
 app.use("/auth", authRoute);
 app.use("/oder", oderRoute);
+
 app.listen(PORT, () => {
   connectDb();
   console.log(`Sever running port ${PORT}`);

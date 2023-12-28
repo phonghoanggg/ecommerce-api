@@ -3,7 +3,7 @@ import Order from "../models/oder.model.js";
 // Create a new order for a specific user
 export const createOrderForUser = async (req, res) => {
   try {
-    const { name, address, phone, cartItems, total, userId } = req.body;
+    const { name, address, phone, cartItems, total, userId, status } = req.body;
     const order = new Order({
       userId,
       name,
@@ -11,6 +11,7 @@ export const createOrderForUser = async (req, res) => {
       phone,
       cartItems,
       total,
+      status,
     });
     await order.save();
     res.status(201).json({ message: "success", order });
@@ -27,6 +28,61 @@ export const getAllOders = async (req, res) => {
 
     // Send the list of orders as the response
     res.status(200).json(orders);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const getRevenueStatistics = async (req, res) => {
+  try {
+    const orders = await Order.find();
+
+    const totalRevenue = orders.reduce((acc, order) => acc + order.total, 0);
+
+    res.status(200).json({ totalRevenue });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+export const getSoldProductsStatistics = async (req, res) => {
+  try {
+    const completedOrders = await Order.find({ status: "Success" });
+
+    // Tính tổng số lượng sản phẩm đã bán từ tất cả các đơn hàng đã hoàn tất
+    const totalSoldProducts = completedOrders.reduce((acc, order) => {
+      return (
+        acc +
+        order.cartItems.reduce(
+          (itemAcc, cartItem) => itemAcc + cartItem.quantity,
+          0
+        )
+      );
+    }, 0);
+
+    // Gửi tổng số lượng sản phẩm đã bán như là phản hồi
+    res.status(200).json({ totalSoldProducts });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const getSoldProductsStatisticsById = async (req, res) => {
+  try {
+    const result = await Order.aggregate([
+      { $match: { status: "Success" } },
+      { $unwind: "$cartItems" },
+      {
+        $group: {
+          _id: "$cartItems._id",
+          totalQuantitySold: { $sum: "$cartItems.quantity" },
+        },
+      },
+    ]);
+
+    res.status(200).json({ productSales: result });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal server error" });

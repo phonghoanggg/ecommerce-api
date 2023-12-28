@@ -7,7 +7,11 @@ const router = express.Router();
 router.get("/", productController.getAllProducts);
 router.get("/:id", productController.getProductdetail);
 router.get("/category/:id", productController.getProductsByCategory);
-router.post("/", productController.createProduct);
+router.post(
+  "/",
+  verifyTokenAndAdminAuthorization,
+  productController.createProduct
+);
 router.put("/:id", productController.updateProduct);
 router.delete("/:id", productController.deleteProduct);
 

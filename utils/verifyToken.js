@@ -1,8 +1,7 @@
+import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
+dotenv.config();
 
-// Middleware for verifying access token
-
-//ACCESS TOKEN FROM HEADER, REFRESH TOKEN FROM COOKIE
 export const verifyToken = (req, res, next) => {
   const token = req.headers.authorization.split(" ")[1];
   if (token) {
@@ -19,7 +18,6 @@ export const verifyToken = (req, res, next) => {
   }
 };
 
-// Middleware to check user's role (optional)
 export const verifyTokenAndUserAuthorization = (req, res, next) => {
   verifyToken(req, res, () => {
     if (req.user.id) {
