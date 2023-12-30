@@ -80,6 +80,14 @@ export const getSoldProductsStatisticsById = async (req, res) => {
           totalQuantitySold: { $sum: "$cartItems.quantity" },
         },
       },
+      {
+        $lookup: {
+          from: "products",
+          localField: "_id",
+          foreignField: "_id",
+          as: "productInfo",
+        },
+      },
     ]);
 
     res.status(200).json({ productSales: result });
