@@ -37,7 +37,7 @@ app.use("/category", categoryRoute);
 app.use("/product", productRoute);
 app.use("/user", userRoute);
 app.use("/auth", authRoute);
-app.use("/oder", oderRoute);
+app.use("/order", oderRoute);
 
 app.listen(PORT, () => {
   connectDb();
