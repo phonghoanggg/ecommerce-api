@@ -1,17 +1,16 @@
 import express from "express";
 import productController from "../controllers/product.controller.js";
-import { verifyTokenAndAdminAuthorization } from "../utils/verifyToken.js";
 
 const router = express.Router();
 
 router.get("/", productController.getAllProducts);
+// lọc sản phẩm
+router.get("/filterProduct", productController.getFilterProduct);
 router.get("/:id", productController.getProductdetail);
 router.get("/category/:id", productController.getProductsByCategory);
-router.post(
-  "/",
-  verifyTokenAndAdminAuthorization,
-  productController.createProduct
-);
+// Kiểm tra số lượng tồn sản phẩm
+router.get("/stock/:id", productController.getProductStock);
+router.post("/", productController.createProduct);
 router.put("/:id", productController.updateProduct);
 router.delete("/:id", productController.deleteProduct);
 

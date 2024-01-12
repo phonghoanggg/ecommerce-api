@@ -36,6 +36,62 @@ const productController = {
       res.status(500).json({ message: error.message });
     }
   },
+  getProductStock: async (req, res) => {
+    try {
+      // Lấy ra productID
+      const { id } = req.params;
+
+      const product = await Product.findById(id);
+
+      if (!product) {
+        return res.status(404).json({ message: "Product not found" });
+      }
+
+      // Get the current inventory quantity of the product
+      const currentStock = product.stock;
+
+      // Send the product inventory as the response
+      res.status(200).json({ id, currentStock });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  },
+  getFilterProduct: async (req, res) => {
+    try {
+      const { name, minPrice, maxPrice, brand } = req.query;
+
+      const filter = {};
+
+      if (name) {
+        filter.name = { $regex: new RegExp(name, "i") };
+      }
+
+      if (minPrice !== undefined && maxPrice !== undefined) {
+        filter.price = {
+          $gte: parseFloat(minPrice),
+          $lte: parseFloat(maxPrice),
+        };
+      } else if (minPrice !== undefined) {
+        filter.price = { $gte: parseFloat(minPrice) };
+      } else if (maxPrice !== undefined) {
+        filter.price = { $lte: parseFloat(maxPrice) };
+      }
+
+      if (brand) {
+        filter.brand = brand;
+      }
+
+      // Find products that match the filter criteria
+      const products = await Product.find(filter);
+
+      // Send the filtered products as the response
+      res.status(200).json(products);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  },
   createProduct: async (req, res) => {
     try {
       const product = new Product(req.body);
