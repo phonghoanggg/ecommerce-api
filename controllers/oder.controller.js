@@ -3,7 +3,7 @@ import Order from "../models/oder.model.js";
 // Create a new order for a specific user
 export const createOrderForUser = async (req, res) => {
   try {
-    const { name, address, phone, cartItems, total, userId, status } = req.body;
+    const { name, address, phone, cartItems, total, userId } = req.body;
     const order = new Order({
       userId,
       name,
@@ -11,7 +11,7 @@ export const createOrderForUser = async (req, res) => {
       phone,
       cartItems,
       total,
-      status,
+      status: "Pending",
     });
     await order.save();
     res.status(201).json({ message: "success", order });
@@ -34,6 +34,44 @@ export const getAllOders = async (req, res) => {
   }
 };
 
+export const filterOrderByStatus = async (req, res) => {
+  try {
+    const status = req.query.status;
+    const query = {};
+    if (status != "All") {
+      query.status = status;
+    }
+    // // Retrieve all orders from the database
+    const orders = await Order.find(query).sort({ createdAt: -1 });
+
+    // Send the list of orders as the response
+    res.status(200).json({ data: orders });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const updateStatusorder = async (req, res) => {
+  try {
+    const { id, status } = req.body;
+    const orders = await Order.findByIdAndUpdate(
+      { _id: id },
+      { $set: { status } },
+      { new: true }
+    );
+
+    // Send the list of orders as the response
+    res.status(200).json({
+      status: "Update order status successfully",
+      data: orders,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
 export const getRevenueStatistics = async (req, res) => {
   try {
     const orders = await Order.find();
@@ -46,6 +84,7 @@ export const getRevenueStatistics = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
 export const getSoldProductsStatistics = async (req, res) => {
   try {
     const completedOrders = await Order.find({ status: "Success" });
