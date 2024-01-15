@@ -1,3 +1,4 @@
+import { format } from "date-fns";
 import Order from "../models/oder.model.js";
 
 // Create a new order for a specific user
@@ -102,6 +103,42 @@ export const getSoldProductsStatistics = async (req, res) => {
 
     // Gửi tổng số lượng sản phẩm đã bán như là phản hồi
     res.status(200).json({ totalSoldProducts });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const getSoldProductsByMonthAndYear = async (req, res) => {
+  try {
+    const completedOrders = await Order.find({ status: "Success" }).sort({
+      createdAt: -1,
+    });
+
+    const monthlyStatistics = [];
+
+    completedOrders.forEach((order) => {
+      const monthYearKey = format(new Date(order.createdAt), "yyyy-MM");
+
+      let exits = monthlyStatistics.find((item) => item.month === monthYearKey);
+
+      if (!exits) {
+        exits = {
+          month: monthYearKey,
+          total: 0,
+        };
+        monthlyStatistics.push(exits);
+      }
+
+      const orderQuantity = order.cartItems.reduce(
+        (itemAcc, cartItem) => itemAcc + cartItem.quantity,
+        0
+      );
+
+      exits.total += orderQuantity;
+    });
+
+    res.status(200).json(monthlyStatistics);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal server error" });

@@ -6,20 +6,20 @@ import {
   getAllOders,
   getOrderDetail,
   getRevenueStatistics,
+  getSoldProductsByMonthAndYear,
   getSoldProductsStatistics,
   getSoldProductsStatisticsById,
   updateStatusorder,
 } from "../controllers/oder.controller.js";
 
-import { verifyTokenAndUserAuthorization } from "./../utils/verifyToken.js";
-
 const router = express.Router();
 
-router.post("/", verifyTokenAndUserAuthorization, createOrderForUser);
+router.post("/", createOrderForUser);
 router.patch("/updateStatusorder", updateStatusorder);
 router.get("/revenueStatistics", getRevenueStatistics);
 router.get("/soldProductsStatistics", getSoldProductsStatistics);
 router.get("/soldProductsStatisticsById", getSoldProductsStatisticsById);
+router.get("/soldProductsByMonthAndYear", getSoldProductsByMonthAndYear);
 router.get("/filterOrderByStatus", filterOrderByStatus);
 router.get("/:id", getOrderDetail);
 router.delete("/:id", deleteOrder);

@@ -59,7 +59,7 @@ const productController = {
   },
   getFilterProduct: async (req, res) => {
     try {
-      const { name, minPrice, maxPrice, brand } = req.query;
+      const { name, minPrice, maxPrice, brand } = req.query;  
 
       const filter = {};
 
