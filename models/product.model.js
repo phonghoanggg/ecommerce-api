@@ -5,14 +5,20 @@ const productSchema = new mongoose.Schema({
   name: { type: String, required: true },
   description: { type: String, required: true },
   price: { type: Number, required: true },
-  newprice: { type: Number, required: true },
+  discount: { type: Number, required: true },
   category: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Category",
   },
   images: [{ type: String }],
   stock: { type: Number, default: 0 },
-  ratings: [{ type: Number }],
+  ratings: [
+    {
+      userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+      rating: { type: Number },
+      comment: { type: String }, // Thêm trường comment
+    },
+  ],
   size: [{ type: String }],
 
   createdAt: { type: Date, default: Date.now },

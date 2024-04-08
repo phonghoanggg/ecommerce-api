@@ -13,5 +13,7 @@ router.get("/stock/:id", productController.getProductStock);
 router.post("/", productController.createProduct);
 router.put("/:id", productController.updateProduct);
 router.delete("/:id", productController.deleteProduct);
+// add comment
+router.post("/products/:productId/ratings", addRatingAndComment);
 
 export default router;

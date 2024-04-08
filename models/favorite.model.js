@@ -1,23 +1,25 @@
 import mongoose from "mongoose";
 
-const favoritePr = new mongoose.Schema({
-  userId: { type: String },
-  name: { type: String, required: true },
-  description: { type: String, required: true },
-  price: { type: Number, required: true },
-  newprice: { type: Number, required: true },
-  category: {
+const favoriteProductSchema = new mongoose.Schema({
+  userId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Category",
+    ref: "User",
+    required: true,
   },
-  images: [{ type: String }],
-  stock: { type: Number, default: 0 },
-  ratings: [{ type: Number }],
-  size: [{ type: String }],
-
-  createdAt: { type: Date, default: Date.now },
-  updatedAt: { type: Date, default: Date.now },
+  productId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Product",
+    required: true,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
-const Product = mongoose.model("Product", favoritePr);
 
-export default Product;
+const FavoriteProduct = mongoose.model(
+  "FavoriteProduct",
+  favoriteProductSchema
+);
+
+export default FavoriteProduct;

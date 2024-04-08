@@ -3,19 +3,10 @@ import Product from "../models/product.model.js";
 const productController = {
   getAllProducts: async (req, res) => {
     try {
-      const page = parseInt(req.query.page) || 1;
-      const pageSize = parseInt(req.query.pageSize) || 20;
-      const skip = (page - 1) * pageSize;
-
       const totalProducts = await Product.countDocuments();
-      const totalPages = Math.ceil(totalProducts / pageSize);
-
-      const products = await Product.find().skip(skip).limit(pageSize);
+      const products = await Product.find();
 
       res.json({
-        page,
-        pageSize,
-        totalPages,
         totalProducts,
         products,
       });
@@ -59,7 +50,7 @@ const productController = {
   },
   getFilterProduct: async (req, res) => {
     try {
-      const { name, minPrice, maxPrice, brand } = req.query;  
+      const { name, minPrice, maxPrice, brand } = req.query;
 
       const filter = {};
 
@@ -172,6 +163,39 @@ const productController = {
       });
     } catch (error) {
       res.status(500).json({ message: error.message });
+    }
+  },
+
+  addRatingAndComment: async (req, res) => {
+    try {
+      const { productId, userId, rating, comment } = req.body;
+
+      const product = await Product.findById(productId);
+      if (!product) {
+        return res.status(404).json({ message: "Sản phẩm không tồn tại." });
+      }
+
+      // Kiểm tra xem người dùng đã xếp hạng cho sản phẩm này chưa
+      const existingRating = product.ratings.find(
+        (item) => String(item.userId) === userId
+      );
+      if (existingRating) {
+        return res
+          .status(400)
+          .json({ message: "Bạn đã xếp hạng cho sản phẩm này trước đó." });
+      }
+
+      // Thêm xếp hạng và bình luận mới vào sản phẩm
+      product.ratings.push({ userId, rating, comment });
+      await product.save();
+
+      res
+        .status(201)
+        .json({ message: "Xếp hạng và bình luận của bạn đã được ghi nhận." });
+    } catch (error) {
+      res
+        .status(500)
+        .json({ message: "Đã có lỗi xảy ra, vui lòng thử lại sau." });
     }
   },
 };

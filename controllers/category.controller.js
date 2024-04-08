@@ -23,7 +23,11 @@ const categoryController = {
 
   createCategory: async (req, res) => {
     try {
-      const newCategory = new Category({ name: req.body.name });
+      const newCategory = new Category({
+        name: req.body.name,
+        image: req.body.image,
+        slug: req.body.slug,
+      });
       await newCategory.save();
       res.json({ newCategory });
     } catch (error) {

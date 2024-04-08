@@ -1,8 +1,8 @@
-import User from "../models/user.model.js";
 import bcrypt from "bcrypt";
+import User from "../models/user.model.js";
 
 const userController = {
-  getAllusers: async (req, res) => {
+  getAllUsers: async (req, res) => {
     try {
       const users = await User.find();
       res.json(users);
@@ -10,7 +10,7 @@ const userController = {
       res.status(500).json({ message: error.message });
     }
   },
-  getuserdetail: async (req, res) => {
+  getUserdetail: async (req, res) => {
     try {
       const user = await User.findById(req.params.id);
       if (!user) {
@@ -21,7 +21,7 @@ const userController = {
       res.status(500).json({ message: error.message });
     }
   },
-  createuser: async (req, res) => {
+  createUser: async (req, res) => {
     const { username, email, password, lastname } = req.body;
 
     try {
@@ -49,7 +49,7 @@ const userController = {
     }
   },
 
-  updateuser: async (req, res) => {
+  updateUser: async (req, res) => {
     try {
       const updateduser = await User.findByIdAndUpdate(
         req.params.id,
@@ -65,7 +65,7 @@ const userController = {
     }
   },
 
-  deleteuser: async (req, res) => {
+  deleteUser: async (req, res) => {
     try {
       const removeduser = await User.findByIdAndRemove(req.params.id);
       if (!removeduser) {
