@@ -28,7 +28,7 @@ export const register = async (req, res) => {
 
     res.status(201).json({
       status: "success",
-      newUser,
+      data: newUser,
     });
   } catch (error) {
     console.error(error);
