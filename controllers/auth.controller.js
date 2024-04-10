@@ -5,7 +5,7 @@ import User from "../models/user.model.js";
 
 dotenv.config();
 export const register = async (req, res) => {
-  const { firstName, email, password, lastName } = req.body;
+  const { firstName, lastName, email, password } = req.body;
 
   try {
     // Check if the user with the given username or email already exists
