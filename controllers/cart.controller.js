@@ -1,6 +1,6 @@
 import Cart from "../models/cart.model.js";
 
-export const CartController = {
+const CartController = {
   /* get all carts (only admin) */
   async get_carts(req, res) {
     try {
@@ -102,3 +102,4 @@ export const CartController = {
     }
   },
 };
+export default CartController;
