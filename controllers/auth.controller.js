@@ -4,16 +4,15 @@ import jwt from "jsonwebtoken";
 import User from "../models/user.model.js";
 
 dotenv.config();
+
 export const register = async (req, res) => {
   const { firstName, lastName, email, password } = req.body;
 
   try {
-    // Check if the user with the given username or email already exists
-    const existingUser = await User.findOne({
-      $or: [{ email }],
-    });
+    // Check if the user with the given email already exists
+    const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.send("Username or email already exists");
+      return res.status(400).json({ message: "Email already exists" });
     }
 
     // Hash the password before storing it
@@ -21,9 +20,9 @@ export const register = async (req, res) => {
 
     const newUser = new User({
       firstName,
+      lastName,
       email,
       password: hashedPassword,
-      lastName,
     });
     await newUser.save();
 
@@ -32,9 +31,8 @@ export const register = async (req, res) => {
       newUser,
     });
   } catch (error) {
-    res.status(500).json({
-      status: "failed",
-    });
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 
