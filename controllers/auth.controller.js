@@ -1,15 +1,17 @@
-import User from "../models/user.model.js";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import jwt from "jsonwebtoken";
+import User from "../models/user.model.js";
 
 dotenv.config();
 export const register = async (req, res) => {
-  const { username, email, password, lastname } = req.body;
+  const { firstName, email, password, lastName } = req.body;
 
   try {
     // Check if the user with the given username or email already exists
-    const existingUser = await User.findOne({ $or: [{ username }, { email }] });
+    const existingUser = await User.findOne({
+      $or: [{ firstName }, { email }],
+    });
     if (existingUser) {
       return res.send("Username or email already exists");
     }
@@ -18,10 +20,10 @@ export const register = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const newUser = new User({
-      username,
+      firstName,
       email,
       password: hashedPassword,
-      lastname,
+      lastName,
     });
     await newUser.save();
 
@@ -59,7 +61,6 @@ export const login = async (req, res) => {
     const token = jwt.sign(
       {
         id: user._id,
-        role: user.role,
       },
       process.env.ACCESS_TOKEN,
       {

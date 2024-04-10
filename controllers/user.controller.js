@@ -22,12 +22,12 @@ const userController = {
     }
   },
   createUser: async (req, res) => {
-    const { username, email, password, lastname } = req.body;
+    const { firstName, email, password, lastName } = req.body;
 
     try {
       // Check if the user with the given username or email already exists
       const existingUser = await User.findOne({
-        $or: [{ username }, { email }],
+        $or: [{ firstName }, { email }],
       });
       if (existingUser) {
         return res.send("Username or email already exists");
@@ -37,10 +37,10 @@ const userController = {
       const hashedPassword = await bcrypt.hash(password, 10);
 
       const newUser = new User({
-        username,
+        firstName,
         email,
         password: hashedPassword,
-        lastname,
+        lastName,
       });
       await newUser.save();
       res.status(200).json(newUser);
