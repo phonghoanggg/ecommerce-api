@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import express from "express";
 import mongoose from "mongoose";
 import authRoute from "./routes/auth.routes.js";
+import cartRoute from "./routes/cart.routes.js";
 import categoryRoute from "./routes/category.routes.js";
 import oderRoute from "./routes/oder.routes.js";
 import productRoute from "./routes/product.routes.js";
@@ -38,6 +39,7 @@ app.use("/product", productRoute);
 app.use("/user", userRoute);
 app.use("/auth", authRoute);
 app.use("/order", oderRoute);
+app.use("/cart", cartRoute);
 
 app.listen(PORT, () => {
   connectDb();
