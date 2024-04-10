@@ -1,4 +1,3 @@
-import bcrypt from "bcrypt";
 import User from "../models/user.model.js";
 
 const userController = {
@@ -17,33 +16,6 @@ const userController = {
         return res.status(404).json({ message: "user not found" });
       }
       res.json(user);
-    } catch (error) {
-      res.status(500).json({ message: error.message });
-    }
-  },
-  createUser: async (req, res) => {
-    const { firstName, email, password, lastName } = req.body;
-
-    try {
-      // Check if the user with the given username or email already exists
-      const existingUser = await User.findOne({
-        $or: [{ firstName }, { email }],
-      });
-      if (existingUser) {
-        return res.send("Username or email already exists");
-      }
-
-      // Hash the password before storing it
-      const hashedPassword = await bcrypt.hash(password, 10);
-
-      const newUser = new User({
-        firstName,
-        email,
-        password: hashedPassword,
-        lastName,
-      });
-      await newUser.save();
-      res.status(200).json(newUser);
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
