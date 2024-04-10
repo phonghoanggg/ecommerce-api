@@ -10,7 +10,7 @@ export const register = async (req, res) => {
   try {
     // Check if the user with the given username or email already exists
     const existingUser = await User.findOne({
-      $or: [{ firstName }, { email }],
+      $or: [{ email }],
     });
     if (existingUser) {
       return res.send("Username or email already exists");
