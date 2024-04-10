@@ -8,12 +8,15 @@ const orderSchema = new mongoose.Schema({
   phone: Number,
   cartItems: [
     {
-      images: [{ type: String }],
-      name: String,
-      price: Number,
-      size: String,
-      quantity: Number,
-      subTotal: Number,
+      product: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Product",
+        required: true,
+      },
+      quantity: {
+        type: Number,
+        default: 1, // Số lượng mặc định là 1 nếu không được chỉ định
+      },
     },
   ],
   total: Number,
