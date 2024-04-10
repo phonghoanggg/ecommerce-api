@@ -1,7 +1,10 @@
 import mongoose from "mongoose";
 
 const orderSchema = new mongoose.Schema({
-  userId: String,
+  userId: {
+    type: String,
+    required: true,
+  },
   name: String,
   note: String,
   address: String,
@@ -10,12 +13,12 @@ const orderSchema = new mongoose.Schema({
     {
       productId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Product",
+        ref: "Product", // Tham chiếu tới mô hình Product
         required: true,
       },
       quantity: {
         type: Number,
-        default: 1, // Số lượng mặc định là 1 nếu không được chỉ định
+        default: 1,
       },
     },
   ],

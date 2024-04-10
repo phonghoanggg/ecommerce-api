@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
-const CartSchema = new mongoose.Schema(
+const cartSchema = new mongoose.Schema(
   {
     userId: {
       type: String,
@@ -9,7 +9,9 @@ const CartSchema = new mongoose.Schema(
     products: [
       {
         productId: {
-          type: String,
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Product", // Tham chiếu tới mô hình Product
+          required: true,
         },
         quantity: {
           type: Number,
@@ -21,6 +23,6 @@ const CartSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const Cart = mongoose.model("CartSchema", CartSchema);
+const Cart = mongoose.model("Cart", cartSchema); // Chỉ định tên của mô hình là "Cart"
 
 export default Cart;
