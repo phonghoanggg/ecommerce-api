@@ -26,7 +26,7 @@ export const register = async (req, res) => {
     });
     await newUser.save();
 
-    res.status(201).json({
+    return res.status(201).json({
       status: "success",
       data: newUser,
     });
@@ -65,7 +65,7 @@ export const login = async (req, res) => {
         expiresIn: "3d",
       }
     );
-    res
+    return res
       .cookie("accessToken", token, {
         httpOnly: true,
         expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
