@@ -3,7 +3,7 @@ import {
   createOrderForUser,
   deleteOrder,
   filterOrderByStatus,
-  getAllOders,
+  getAllOrders,
   getOrderDetail,
   getRevenueStatistics,
   getSoldProductsByMonthAndYear,
@@ -23,6 +23,6 @@ router.get("/soldProductsByMonthAndYear", getSoldProductsByMonthAndYear);
 router.get("/filterOrderByStatus", filterOrderByStatus);
 router.get("/:id", getOrderDetail);
 router.delete("/:id", deleteOrder);
-router.get("/", getAllOders);
+router.get("/", getAllOrders);
 
 export default router;
