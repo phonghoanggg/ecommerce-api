@@ -22,19 +22,15 @@ export const createOrderForUser = async (req, res) => {
   }
 };
 
-export const getAllOders = async (req, res) => {
+export const getAllOrders = async (req, res) => {
   try {
-    // Retrieve all orders from the database
-    const orders = await Order.find();
-
-    // Send the list of orders as the response
+    const orders = await Order.find().populate("cartItems.productId");
     res.status(200).json(orders);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal server error" });
   }
 };
-
 export const filterOrderByStatus = async (req, res) => {
   try {
     const status = req.query.status;
