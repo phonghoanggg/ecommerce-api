@@ -13,12 +13,16 @@ const orderSchema = new mongoose.Schema({
     {
       productId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Product", // Tham chiếu tới mô hình Product
+        ref: "Product",
         required: true,
       },
       quantity: {
         type: Number,
         default: 1,
+      },
+      size: {
+        type: String,
+        required: true,
       },
     },
   ],
