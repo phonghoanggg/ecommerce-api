@@ -7,6 +7,7 @@ import mongoose from "mongoose";
 import authRoute from "./routes/auth.routes.js";
 import cartRoute from "./routes/cart.routes.js";
 import categoryRoute from "./routes/category.routes.js";
+import favoriteRoute from "./routes/favorite.routes.js";
 import oderRoute from "./routes/oder.routes.js";
 import productRoute from "./routes/product.routes.js";
 import userRoute from "./routes/user.routes.js";
@@ -40,6 +41,7 @@ app.use("/user", userRoute);
 app.use("/auth", authRoute);
 app.use("/order", oderRoute);
 app.use("/cart", cartRoute);
+app.use("/favorite", favoriteRoute);
 
 app.listen(PORT, () => {
   connectDb();
