@@ -14,7 +14,7 @@ export const addFavoriteProduct = async (req, res) => {
     if (existingFavorite) {
       return res
         .status(400)
-        .json({ message: "Sản phẩm đã có trong danh sách yêu thích của bạn." });
+        .json({ message: "The product is already in your favorites list." });
     }
 
     // Tạo một mục mới trong danh sách yêu thích
@@ -23,12 +23,12 @@ export const addFavoriteProduct = async (req, res) => {
 
     res.status(201).json({
       status: 200,
-      message: "Sản phẩm đã được thêm vào danh sách yêu thích của bạn.",
+      message: "The product has been added to your favorites list.",
     });
   } catch (error) {
     res
       .status(500)
-      .json({ message: "Đã có lỗi xảy ra, vui lòng thử lại sau." });
+      .json({ message: "An error occurred, please try again later." });
   }
 };
 
@@ -37,13 +37,40 @@ export const getFavoriteProductsByUser = async (req, res) => {
   try {
     const { userId } = req.params;
 
-    // Tìm tất cả các sản phẩm trong danh sách yêu thích của người dùng
-    const favoriteProducts = await FavoriteProduct.find({ userId });
+    // Find all favorite products for the user and populate the product details
+    const favoriteProducts = await FavoriteProduct.find({ userId }).populate(
+      "productId"
+    );
 
-    res.status(200).json(favoriteProducts);
+    // If you need to transform the data structure, you can do it here
+    const populatedFavoriteProducts = favoriteProducts.map((fav) => ({
+      ...fav.toObject(),
+      product: fav.productId, // Move the populated product to a `product` field
+    }));
+
+    res.status(200).json(populatedFavoriteProducts);
   } catch (error) {
     res
       .status(500)
-      .json({ message: "Đã có lỗi xảy ra, vui lòng thử lại sau." });
+      .json({ message: "An error occurred, please try again later." });
+  }
+};
+
+// Xóa sản phẩm khỏi danh sách yêu thích của người dùng
+export const removeFavoriteProduct = async (req, res) => {
+  try {
+    const { userId, productId } = req.params;
+
+    // Tìm và xóa sản phẩm khỏi danh sách yêu thích của người dùng
+    await FavoriteProduct.findOneAndDelete({ userId, productId });
+
+    res.status(200).json({
+      status: 200,
+      message: "The product has been removed from your favorites list.",
+    });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "An error occurred, please try again later." });
   }
 };
