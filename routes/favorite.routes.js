@@ -9,7 +9,7 @@ const router = express.Router();
 
 // Định nghĩa route để thêm sản phẩm vào danh sách yêu thích của người dùng
 router.post("/", addFavoriteProduct);
-router.delete("/productId", removeFavoriteProduct);
+router.delete("/:productId", removeFavoriteProduct);
 
 // Định nghĩa route để lấy danh sách sản phẩm yêu thích của người dùng
 router.get("/:userId", getFavoriteProductsByUser);
