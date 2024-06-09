@@ -20,6 +20,9 @@ const userSchema = new mongoose.Schema({
   lastName: {
     type: String,
   },
+  address: {
+    type: String,
+  },
   province: {
     type: String,
   },

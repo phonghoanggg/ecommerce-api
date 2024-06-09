@@ -4,11 +4,24 @@ import Order from "../models/oder.model.js";
 // Create a new order for a specific user
 export const createOrderForUser = async (req, res) => {
   try {
-    const { name, address, phone, cartItems, total, userId } = req.body;
+    const {
+      name,
+      address,
+      province,
+      district,
+      commune,
+      phone,
+      cartItems,
+      total,
+      userId,
+    } = req.body;
     const order = new Order({
       userId,
       name,
       address,
+      province,
+      district,
+      commune,
       phone,
       cartItems,
       total,
