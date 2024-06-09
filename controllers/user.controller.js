@@ -9,11 +9,12 @@ const userController = {
       res.status(500).json({ message: error.message });
     }
   },
+
   getUserdetail: async (req, res) => {
     try {
       const user = await User.findById(req.params.id);
       if (!user) {
-        return res.status(404).json({ message: "user not found" });
+        return res.status(404).json({ message: "User not found" });
       }
       res.json(user);
     } catch (error) {
@@ -21,17 +22,49 @@ const userController = {
     }
   },
 
+  createUser: async (req, res) => {
+    const {
+      firstName,
+      lastName,
+      email,
+      password,
+      province,
+      district,
+      commune,
+      role,
+    } = req.body;
+
+    // Create a new user object
+    const newUser = new User({
+      firstName,
+      lastName,
+      email,
+      password,
+      province,
+      district,
+      commune,
+      role,
+    });
+
+    try {
+      const savedUser = await newUser.save();
+      res.status(201).json(savedUser);
+    } catch (error) {
+      res.status(400).json({ message: error.message });
+    }
+  },
+
   updateUser: async (req, res) => {
     try {
-      const updateduser = await User.findByIdAndUpdate(
+      const updatedUser = await User.findByIdAndUpdate(
         req.params.id,
         req.body,
         { new: true }
       );
-      if (!updateduser) {
-        return res.status(404).json({ message: "user not found" });
+      if (!updatedUser) {
+        return res.status(404).json({ message: "User not found" });
       }
-      res.status(200).json(updateduser);
+      res.status(200).json(updatedUser);
     } catch (error) {
       res.status(400).json({ message: error.message });
     }
@@ -39,11 +72,11 @@ const userController = {
 
   deleteUser: async (req, res) => {
     try {
-      const removeduser = await User.findByIdAndRemove(req.params.id);
-      if (!removeduser) {
-        return res.status(404).json({ message: "user not found" });
+      const removedUser = await User.findByIdAndRemove(req.params.id);
+      if (!removedUser) {
+        return res.status(404).json({ message: "User not found" });
       }
-      res.json({ message: "user removed" });
+      res.json({ message: "User removed" });
     } catch (error) {
       res.status(500).json({ message: error.message });
     }

@@ -17,6 +17,15 @@ const userSchema = new mongoose.Schema({
   lastName: {
     type: String,
   },
+  province: {
+    type: String,
+  },
+  district: {
+    type: String,
+  },
+  commune: {
+    type: String,
+  },
   role: {
     type: String,
     default: "user",
