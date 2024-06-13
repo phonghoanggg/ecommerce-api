@@ -1,6 +1,15 @@
 import Product from "../models/product.model.js";
 
 const productController = {
+  getTotalProductCount: async (req, res) => {
+    try {
+      const totalProducts = await Product.countDocuments();
+      res.json({ totalProducts });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  },
+
   getAllProducts: async (req, res) => {
     try {
       const totalProducts = await Product.countDocuments();

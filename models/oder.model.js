@@ -5,13 +5,13 @@ const orderSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  name: String,
+  name: { type: String, required: true },
+  address: { type: String, required: true },
+  province: { type: String, required: true },
+  district: { type: String, required: true },
+  commune: { type: String, required: true },
   note: String,
-  address: String,
-  province: String,
-  district: String,
-  commune: String,
-  phone: Number,
+  phone: { type: String, required: true },
   cartItems: [
     {
       productId: {
