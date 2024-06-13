@@ -4,7 +4,9 @@ const userSchema = new mongoose.Schema({
   firstName: {
     type: String,
     required: true,
-    unique: true,
+  },
+  lastName: {
+    type: String,
   },
   email: {
     type: String,
@@ -18,12 +20,7 @@ const userSchema = new mongoose.Schema({
   phone: {
     type: Number,
   },
-  lastName: {
-    type: String,
-  },
-  address: {
-    type: String,
-  },
+
   province: {
     type: String,
   },
