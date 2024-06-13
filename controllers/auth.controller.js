@@ -5,18 +5,18 @@ import User from "../models/user.model.js";
 
 dotenv.config();
 
+const saltRounds = parseInt(process.env.BCRYPT_SALT_ROUNDS) || 10;
+
 export const register = async (req, res) => {
   const { firstName, lastName, email, password } = req.body;
 
   try {
-    // Check if the user with the given email already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ message: "Email already exists" });
     }
 
-    // Hash the password before storing it
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
 
     const newUser = new User({
       firstName,
@@ -31,7 +31,7 @@ export const register = async (req, res) => {
       data: newUser,
     });
   } catch (error) {
-    console.error(error);
+    console.error("Registration error:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 };
