@@ -8,7 +8,16 @@ dotenv.config();
 const saltRounds = parseInt(process.env.BCRYPT_SALT_ROUNDS) || 10;
 
 export const register = async (req, res) => {
-  const { firstName, lastName, email, password } = req.body;
+  const {
+    firstName,
+    lastName,
+    email,
+    password,
+    phone,
+    province,
+    district,
+    commune,
+  } = req.body;
 
   try {
     const existingUser = await User.findOne({ email });
@@ -23,6 +32,10 @@ export const register = async (req, res) => {
       lastName,
       email,
       password: hashedPassword,
+      phone,
+      province,
+      district,
+      commune,
     });
     await newUser.save();
 
