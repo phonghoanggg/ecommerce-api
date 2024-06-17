@@ -32,7 +32,7 @@ const productController = {
 
   getProductDetail: async (req, res) => {
     try {
-      const productName = req.params.name;
+      const productName = req.params.slug;
       const formattedProductName = productName.toLowerCase().replace(/'/g, ""); // Chuyển tên thành viết thường và loại bỏ dấu '
 
       const product = await Product.findOne({
