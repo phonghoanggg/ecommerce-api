@@ -17,6 +17,7 @@ export const register = async (req, res) => {
     province,
     district,
     commune,
+    role,
   } = req.body;
 
   try {
@@ -36,6 +37,7 @@ export const register = async (req, res) => {
       province,
       district,
       commune,
+      role,
     });
     await newUser.save();
 

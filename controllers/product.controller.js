@@ -12,17 +12,24 @@ const productController = {
 
   getAllProducts: async (req, res) => {
     try {
+      const page = parseInt(req.query.page) || 1; // Default to page 1 if not provided
+      const limit = parseInt(req.query.limit) || 10; // Default to 10 products per page if not provided
+      const skip = (page - 1) * limit;
+  
       const totalProducts = await Product.countDocuments();
-      const products = await Product.find();
-
+      const products = await Product.find().skip(skip).limit(limit);
+  
       res.json({
         totalProducts,
+        page,
+        totalPages: Math.ceil(totalProducts / limit),
         products,
       });
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
-  },
+  };
+  
   getProductdetail: async (req, res) => {
     try {
       const product = await Product.findById(req.params.id).populate(
