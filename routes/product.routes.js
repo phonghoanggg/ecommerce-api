@@ -6,7 +6,7 @@ const router = express.Router();
 router.get("/", productController.getAllProducts);
 // lọc sản phẩm
 router.get("/filterProduct", productController.getFilterProduct);
-router.get("/:name", productController.getProductdetail);
+router.get("/:name", productController.getProductDetail);
 router.get("/category/:id", productController.getProductsByCategory);
 // Kiểm tra số lượng tồn sản phẩm
 router.get("/stock/:id", productController.getProductStock);
