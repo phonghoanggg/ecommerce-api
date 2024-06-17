@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import slugify from "slugify"; // Thêm slugify để tạo slug từ name
+import slugify from "slugify";
 
 const productSchema = new mongoose.Schema({
   userId: { type: String },
@@ -26,9 +26,11 @@ const productSchema = new mongoose.Schema({
   updatedAt: { type: Date, default: Date.now },
 });
 
-// Tạo slug từ name trước khi lưu vào cơ sở dữ liệu
+// Generate slug from name before saving
 productSchema.pre("save", function (next) {
-  this.slug = slugify(this.name, { lower: true }); // Chuyển tên thành slug viết thường
+  if (this.isModified("name")) {
+    this.slug = slugify(this.name, { lower: true, remove: /[*+~.()'"!:@]/g });
+  }
   next();
 });
 
