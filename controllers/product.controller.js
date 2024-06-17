@@ -30,19 +30,23 @@ const productController = {
     }
   },
 
-  getProductdetail: async (req, res) => {
+  getProductDetail: async (req, res) => {
     try {
-      const product = await Product.findById(req.params.id).populate(
+      const productName = req.params.name;
+      const product = await Product.findOne({ name: productName }).populate(
         "category"
       );
+
       if (!product) {
         return res.status(404).json({ message: "Product not found" });
       }
+
       res.json(product);
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
   },
+
   getProductStock: async (req, res) => {
     try {
       // Lấy ra productID
