@@ -214,6 +214,24 @@ const productController = {
         .json({ message: "Đã có lỗi xảy ra, vui lòng thử lại sau." });
     }
   },
+  getProductCountByCategory: async (req, res) => {
+    try {
+      const categoryCounts = await Product.aggregate([
+        {
+          $group: {
+            _id: "$category",
+            count: { $sum: 1 },
+          },
+        },
+      ]);
+
+      res.json({
+        categoryCounts,
+      });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  },
 };
 
 export default productController;

@@ -14,9 +14,8 @@ router.post("/", productController.createProduct);
 router.put("/:id", productController.updateProduct);
 router.delete("/:id", productController.deleteProduct);
 // add comment
-router.post(
-  "/products/:productId/ratings",
-  productController.addRatingAndComment
-);
+router.post("/:id/ratings", productController.addRatingAndComment);
 
+router.get("/countByCategories", productController.getProductCountByCategory);
+router.get("/countProducts", productController.getTotalProductCount);
 export default router;
