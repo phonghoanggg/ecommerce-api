@@ -33,9 +33,11 @@ const productController = {
   getProductDetail: async (req, res) => {
     try {
       const productName = req.params.name;
-      const product = await Product.findOne({ name: productName }).populate(
-        "category"
-      );
+      const formattedProductName = productName.toLowerCase().replace(/'/g, ""); // Chuyển tên thành viết thường và loại bỏ dấu '
+
+      const product = await Product.findOne({
+        slug: formattedProductName,
+      }).populate("category");
 
       if (!product) {
         return res.status(404).json({ message: "Product not found" });
