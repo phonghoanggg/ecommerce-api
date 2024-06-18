@@ -68,7 +68,7 @@ const productController = {
   },
   getFilterProduct: async (req, res) => {
     try {
-      const { name, minPrice, maxPrice, brand } = req.query;
+      const { name, minPrice, maxPrice, brand, sort } = req.query;
 
       const filter = {};
 
@@ -91,10 +91,15 @@ const productController = {
         filter.brand = brand;
       }
 
-      // Find products that match the filter criteria
-      const products = await Product.find(filter);
+      let sortOption = {};
+      if (sort === "Price-Low-High") {
+        sortOption = { price: 1 }; // Sort by price in ascending order
+      } else if (sort === "Price-High-Low") {
+        sortOption = { price: -1 }; // Sort by price in descending order
+      }
 
-      // Send the filtered products as the response
+      const products = await Product.find(filter).sort(sortOption);
+
       res.status(200).json(products);
     } catch (error) {
       console.error(error);
