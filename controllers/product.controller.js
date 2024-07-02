@@ -191,14 +191,22 @@ const productController = {
 
   addRatingAndComment: async (req, res) => {
     try {
-      const { productId, userId, rating, comment } = req.body;
+      const { userId, rating, comment } = req.body;
+      const { slug } = req.params;
 
-      const product = await Product.findById(productId);
+      // Ensure rating is within valid range
+      if (rating < 1 || rating > 5) {
+        return res
+          .status(400)
+          .json({ message: "Xếp hạng phải nằm trong khoảng từ 1 đến 5." });
+      }
+
+      const product = await Product.findOne({ slug });
       if (!product) {
         return res.status(404).json({ message: "Sản phẩm không tồn tại." });
       }
 
-      // Kiểm tra xem người dùng đã xếp hạng cho sản phẩm này chưa
+      // Check if user has already rated this product
       const existingRating = product.ratings.find(
         (item) => String(item.userId) === userId
       );
@@ -208,7 +216,7 @@ const productController = {
           .json({ message: "Bạn đã xếp hạng cho sản phẩm này trước đó." });
       }
 
-      // Thêm xếp hạng và bình luận mới vào sản phẩm
+      // Add new rating and comment to the product
       product.ratings.push({ userId, rating, comment });
       await product.save();
 
@@ -216,6 +224,7 @@ const productController = {
         .status(201)
         .json({ message: "Xếp hạng và bình luận của bạn đã được ghi nhận." });
     } catch (error) {
+      console.error(error);
       res
         .status(500)
         .json({ message: "Đã có lỗi xảy ra, vui lòng thử lại sau." });
