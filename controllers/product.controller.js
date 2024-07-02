@@ -217,12 +217,85 @@ const productController = {
       }
 
       // Add new rating and comment to the product
-      product.ratings.push({ userId, rating, comment });
+      const newComment = {
+        userId,
+        rating,
+        comment,
+        _id: new mongoose.Types.ObjectId(),
+      };
+      product.ratings.push(newComment);
       await product.save();
 
+      res.status(201).json({
+        message: "Xếp hạng và bình luận của bạn đã được ghi nhận.",
+        newComment,
+      });
+    } catch (error) {
+      console.error(error);
       res
-        .status(201)
-        .json({ message: "Xếp hạng và bình luận của bạn đã được ghi nhận." });
+        .status(500)
+        .json({ message: "Đã có lỗi xảy ra, vui lòng thử lại sau." });
+    }
+  },
+
+  updateComment: async (req, res) => {
+    try {
+      const { userId, rating, comment } = req.body;
+      const { slug, commentId } = req.params;
+
+      // Ensure rating is within valid range
+      if (rating < 1 || rating > 5) {
+        return res
+          .status(400)
+          .json({ message: "Xếp hạng phải nằm trong khoảng từ 1 đến 5." });
+      }
+
+      const product = await Product.findOne({ slug });
+      if (!product) {
+        return res.status(404).json({ message: "Sản phẩm không tồn tại." });
+      }
+
+      const existingComment = product.ratings.id(commentId);
+      if (!existingComment || String(existingComment.userId) !== userId) {
+        return res.status(404).json({
+          message: "Bình luận không tồn tại hoặc bạn không có quyền chỉnh sửa.",
+        });
+      }
+
+      existingComment.rating = rating;
+      existingComment.comment = comment;
+      await product.save();
+
+      res.json({ message: "Bình luận đã được cập nhật." });
+    } catch (error) {
+      console.error(error);
+      res
+        .status(500)
+        .json({ message: "Đã có lỗi xảy ra, vui lòng thử lại sau." });
+    }
+  },
+
+  deleteComment: async (req, res) => {
+    try {
+      const { userId } = req.body;
+      const { slug, commentId } = req.params;
+
+      const product = await Product.findOne({ slug });
+      if (!product) {
+        return res.status(404).json({ message: "Sản phẩm không tồn tại." });
+      }
+
+      const existingComment = product.ratings.id(commentId);
+      if (!existingComment || String(existingComment.userId) !== userId) {
+        return res.status(404).json({
+          message: "Bình luận không tồn tại hoặc bạn không có quyền xóa.",
+        });
+      }
+
+      existingComment.remove();
+      await product.save();
+
+      res.json({ message: "Bình luận đã được xóa." });
     } catch (error) {
       console.error(error);
       res
