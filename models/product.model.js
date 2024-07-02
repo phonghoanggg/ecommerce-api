@@ -18,6 +18,8 @@ const productSchema = new mongoose.Schema({
       userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
       rating: { type: Number },
       comment: { type: String },
+      createdAt: { type: Date, default: Date.now },
+      updatedAt: { type: Date, default: Date.now },
     },
   ],
   size: [{ type: String }],
