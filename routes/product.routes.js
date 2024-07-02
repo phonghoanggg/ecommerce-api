@@ -25,6 +25,7 @@ router.get("/category/:id", productController.getProductsByCategory);
 
 // Bình luận và đánh giá sản phẩm
 router.post("/:slug/ratings", productController.addRatingAndComment);
+router.get("/:slug/ratings", productController.getComments);
 router.put("/:slug/ratings/:commentId", productController.updateComment);
 router.delete("/:slug/ratings/:commentId", productController.deleteComment);
 

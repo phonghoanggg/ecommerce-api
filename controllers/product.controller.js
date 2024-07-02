@@ -189,6 +189,22 @@ const productController = {
     }
   },
 
+  getComments: async (req, res) => {
+    try {
+      const { slug } = req.params;
+      const product = await Product.findOne({ slug }, "ratings");
+      if (!product) {
+        return res.status(404).json({ message: "Sản phẩm không tồn tại." });
+      }
+      res.json(product.ratings);
+    } catch (error) {
+      console.error(error);
+      res
+        .status(500)
+        .json({ message: "Đã có lỗi xảy ra, vui lòng thử lại sau." });
+    }
+  },
+
   addRatingAndComment: async (req, res) => {
     try {
       const { userId, rating, comment } = req.body;
