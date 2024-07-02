@@ -193,10 +193,22 @@ const productController = {
   getComments: async (req, res) => {
     try {
       const { slug } = req.params;
-      const product = await Product.findOne({ slug }, "ratings");
+
+      // Find the product by slug and populate the ratings array with user information
+      const product = await Product.findOne({ slug }).populate({
+        path: "ratings",
+        populate: {
+          path: "userId",
+          model: "User", // Name of the User model
+          select: "username email", // Select fields to include
+        },
+      });
+
       if (!product) {
         return res.status(404).json({ message: "Sản phẩm không tồn tại." });
       }
+
+      // Return the populated ratings array with user information
       res.json(product.ratings);
     } catch (error) {
       console.error(error);
