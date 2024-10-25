@@ -72,6 +72,7 @@ const productController = {
       res.status(500).json({ message: "Internal server error" });
     }
   },
+
   getFilterProduct: async (req, res) => {
     try {
       const { name, minPrice, maxPrice, brand, sort } = req.query;

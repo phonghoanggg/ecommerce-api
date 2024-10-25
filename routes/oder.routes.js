@@ -13,15 +13,16 @@ import {
 } from "../controllers/oder.controller.js";
 
 const router = express.Router();
-
-router.post("/", createOrderForUser);
-router.patch("/updateStatusorder", updateStatusorder);
-router.get("/revenueStatistics", getRevenueStatistics);
 router.get("/soldProductsStatistics", getSoldProductsStatistics);
 router.get("/soldProductsStatisticsById", getSoldProductsStatisticsById);
 router.get("/soldProductsByMonthAndYear", getSoldProductsByMonthAndYear);
 router.get("/filterOrderByStatus", filterOrderByStatus);
 router.get("/:id", getOrderDetail);
+router.get("/revenueStatistics", getRevenueStatistics);
+
+router.post("/", createOrderForUser);
+
+router.put("/updateStatusorder", updateStatusorder);
 router.delete("/:id", deleteOrder);
 router.get("/", getAllOrders);
 

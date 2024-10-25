@@ -26,6 +26,7 @@ const connectDb = async () => {
     console.log("Errors", error);
   }
 };
+
 mongoose.set("strictQuery", false);
 app.use(express.json());
 app.use(cors());

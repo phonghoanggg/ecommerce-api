@@ -9,17 +9,17 @@ const categoryController = {
       res.status(500).json({ error: "Internal server error" });
     }
   },
-  getOneSCategories: async (req, res) => {
-    try {
-      const category = await Category.findById(req.params.id);
-      if (!category) {
-        return res.status(404).json({ message: "Category not found" });
-      }
-      res.status(200).json(category);
-    } catch (error) {
-      res.status(500).json({ message: "Internal server error" });
-    }
-  },
+  // getOneSCategories: async (req, res) => {
+  //   try {
+  //     const category = await Category.findById(req.params.id);
+  //     if (!category) {
+  //       return res.status(404).json({ message: "Category not found" });
+  //     }
+  //     res.status(200).json(category);
+  //   } catch (error) {
+  //     res.status(500).json({ message: "Internal server error" });
+  //   }
+  // },
 
   createCategory: async (req, res) => {
     try {
