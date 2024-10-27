@@ -26,7 +26,6 @@ const categoryController = {
       const newCategory = new Category({
         name: req.body.name,
         image: req.body.image,
-        slug: req.body.slug,
       });
       await newCategory.save();
       res.json({ newCategory });
@@ -40,6 +39,7 @@ const categoryController = {
       const updatedCategory = await Category.findByIdAndUpdate(
         req.params.id,
         { name: req.body.name },
+        { image: req.body.image },
         { new: true }
       );
       res.json(updatedCategory);
