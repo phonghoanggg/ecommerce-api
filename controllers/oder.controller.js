@@ -64,24 +64,23 @@ export const filterOrderByStatus = async (req, res) => {
 
 export const updateStatusorder = async (req, res) => {
   try {
-    const { id, status } = req.body;
-    const orders = await Order.findByIdAndUpdate(
-      { _id: id },
+    const { id, status } = req.body; // Ensure id is included in the request body
+    const updatedOrder = await Order.findByIdAndUpdate(
+      id, // Only id is needed
       { $set: { status } },
       { new: true }
     );
 
-    // Send the list of orders as the response
+    // Send the updated order as the response
     res.status(200).json({
       status: "Update order status successfully",
-      data: orders,
+      data: updatedOrder,
     });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal server error" });
   }
 };
-
 export const getRevenueStatistics = async (req, res) => {
   try {
     const orders = await Order.find();
