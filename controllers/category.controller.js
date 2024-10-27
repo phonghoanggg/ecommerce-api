@@ -23,12 +23,15 @@ const categoryController = {
 
   createCategory: async (req, res) => {
     try {
-      const newCategory = new Category({
-        name: req.body.name,
-        image: req.body.image,
-      });
+      const { name, image } = req.body;
+
+      if (!name || !image) {
+        return res.status(400).json({ error: "Name and image are required." });
+      }
+
+      const newCategory = new Category({ name, image });
       await newCategory.save();
-      res.json({ newCategory });
+      res.json({ category: newCategory });
     } catch (error) {
       res.status(500).json({ error: "Internal server error" });
     }
